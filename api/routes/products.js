@@ -12,6 +12,9 @@ router.get('/', (req, res, next) => {
 })
 
 
+// pull then push 1
+
+
 router.post("/", (req, res, next) => {
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
