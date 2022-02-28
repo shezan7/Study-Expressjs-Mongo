@@ -5,6 +5,10 @@ const bcrypt = require('bcrypt')
 
 const User = require('../models/user')
 
+
+//chng-1
+
+
 router.post('/signup', (req, res, next) => {
     
     // const user = new User({
