@@ -1,3 +1,4 @@
+const fs = require('fs')
 const express = require('express')
 const req = require('express/lib/request')
 const router = express.Router()
@@ -11,29 +12,8 @@ cloudinary.config({
     cloud_name: 'dkbtyznkd',
     api_key: '459563487576644',
     api_secret: '2e8QcuVAm9wJ3N31EkCxKGntoAQ',
-  });
+});
 
-
-
-
-
-
-// const multer = require('multer')
-
-// const storage = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//         cb(null, './uploads/')
-//     },
-//     filename: function(req, file, cb) {
-//         cb(null, new Date().toISOString() + file.originalname)
-//     }
-// })
-//const upload = multer({storage: storage})
-
-// const upload = multer({dest: 'uploads/'})
-
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage: storage });
 
 
 const checkAuth = require('../middleware/check-auth')
@@ -56,10 +36,10 @@ router.post("/", (req, res, next) => {
     product
         .save()
         .then(result => {
-        console.log(result)
+            console.log(result)
 
 
-        res.status(200).json({
+            res.status(200).json({
                 message: 'Handling POST requests to /products',
                 createProduct: result
             })
@@ -72,10 +52,10 @@ router.post("/", (req, res, next) => {
             })
         })
 
-        // res.status(200).json({
-        //              message: 'Handling POST requests to /products',
-        //              createProduct: product
-        //          })
+    // res.status(200).json({
+    //              message: 'Handling POST requests to /products',
+    //              createProduct: product
+    //          })
 
 
 
@@ -88,14 +68,17 @@ router.post("/", (req, res, next) => {
 // })
 
 
-router.post("/pic", async(req, res, next) => {
+router.post("/pic", async (req, res, next) => {
     //console.log(req.files)
     console.log(req.body)
-    
+
 
     const filePath = req.files.photo.tempFilePath
 
     const cloudInfo = await cloudinary.uploader.upload(filePath)
+
+    fs.unlinkSync(filePath);
+
 
     console.log(req.body);
 
@@ -108,7 +91,7 @@ router.post("/pic", async(req, res, next) => {
     product
         .save()
         .then(result => {
-        res.status(200).json({
+            res.status(200).json({
                 message: 'Handling POST requests to /products',
                 createProduct: result
             })
@@ -119,30 +102,28 @@ router.post("/pic", async(req, res, next) => {
                 error: err
             })
         })
-
-
 })
 
 
 router.get('/:productId', (req, res, next) => {
     const id = req.params.productId
-    
+
     Product.findById(id)
         .exec()
         .then(doc => {
             console.log("From database", doc)
             // res.status(200).json(doc)
-            if(doc) {
+            if (doc) {
                 res.status(200).json(doc)
             }
             else {
-                res.status(404).json({message: 'No valid entry found for provided ID'})
+                res.status(404).json({ message: 'No valid entry found for provided ID' })
             }
         })
         .catch(err => {
             console.log(err)
-            res.status(500).json({error: err})
-        }) 
+            res.status(500).json({ error: err })
+        })
 
 
     // Product.findById(id)
@@ -155,7 +136,7 @@ router.get('/:productId', (req, res, next) => {
     //         console.log(err)
     //         res.status(500).json({error: err})
     // }) 
-        
+
 
     // if(id === 'special') {
     //     res.status(200).json({
@@ -175,14 +156,14 @@ router.get('/:productId', (req, res, next) => {
 
 router.patch('/:productId', (req, res, next) => {
     const id = req.params.productId
-   
+
     // Product.update({_id: id}, {$set: {name: req.body.newName, price: req.body.newPrice}})
-    
+
     const updateOperation = {}
-    for(const operation of req.body) {
+    for (const operation of req.body) {
         updateOperation[operation.propName] = operation.value
     }
-    Product.update({_id: id}, {$set: updateOperation})
+    Product.update({ _id: id }, { $set: updateOperation })
         .exec()
         .then(result => {
             console.log(result)
@@ -193,7 +174,7 @@ router.patch('/:productId', (req, res, next) => {
             res.status(500).json({
                 error: err
             })
-        }) 
+        })
 
 })
 
@@ -207,7 +188,7 @@ router.patch('/:productId', (req, res, next) => {
 
 router.delete('/:productId', (req, res, next) => {
     const id = req.params.productId
-    Product.remove({_id: id})
+    Product.remove({ _id: id })
         .exec()
         .then(result => {
             res.status(200).json(result)
@@ -217,7 +198,7 @@ router.delete('/:productId', (req, res, next) => {
             res.status(500).json({
                 error: err
             })
-        }) 
+        })
 })
 
 
