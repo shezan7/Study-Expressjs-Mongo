@@ -5,6 +5,8 @@ const mongoose = require('mongoose')
 
 const bodyParser = require('body-parser')
 
+const fileUpload = require('express-fileupload')
+
 
 const productRoutes = require('./api/routes/products')
 const orderRoutes = require('./api/routes/orders')
@@ -20,8 +22,12 @@ mongoose.connect('mongodb+srv://shezan7:' + process.env.MONGO_ATLAS_PW + '@clust
 // })
 
 
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
+// app.use(bodyParser.urlencoded({extended: false}))
+app.use(express.json())
+
+app.use(fileUpload({
+    useTempFiles: true,
+  }));
 
 app.use('/products', productRoutes)
 app.use('/orders', orderRoutes)

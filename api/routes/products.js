@@ -5,20 +5,35 @@ const router = express.Router()
 const mongoose = require('mongoose')
 const Product = require('../models/product')
 
+const cloudinary = require('cloudinary')
 
-const multer = require('multer')
+cloudinary.config({
+    cloud_name: 'dkbtyznkd',
+    api_key: '459563487576644',
+    api_secret: '2e8QcuVAm9wJ3N31EkCxKGntoAQ',
+  });
 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, './uploads/')
-    },
-    filename: function(req, file, cb) {
-        cb(null, new Date().toISOString() + file.originalname)
-    }
-})
-const upload = multer({storage: storage})
+
+
+
+
+
+// const multer = require('multer')
+
+// const storage = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//         cb(null, './uploads/')
+//     },
+//     filename: function(req, file, cb) {
+//         cb(null, new Date().toISOString() + file.originalname)
+//     }
+// })
+//const upload = multer({storage: storage})
 
 // const upload = multer({dest: 'uploads/'})
+
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
 
 
 const checkAuth = require('../middleware/check-auth')
@@ -73,25 +88,30 @@ router.post("/", (req, res, next) => {
 // })
 
 
-router.post("/pic", upload.single('productImage'), (req, res, next) => {
-    console.log(req.file)
+router.post("/pic", async(req, res, next) => {
+    //console.log(req.files)
+    console.log(req.body)
+    
+
+    const filePath = req.files.photo.tempFilePath
+
+    const cloudInfo = await cloudinary.uploader.upload(filePath)
+
+    console.log(req.body);
+
     const product = new Product({
-        _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        image: cloudInfo.url
     })
 
     product
         .save()
         .then(result => {
-        console.log(result)
-
-
         res.status(200).json({
                 message: 'Handling POST requests to /products',
                 createProduct: result
             })
-
         })
         .catch(err => {
             console.log(err)
@@ -99,6 +119,7 @@ router.post("/pic", upload.single('productImage'), (req, res, next) => {
                 error: err
             })
         })
+
 
 })
 
