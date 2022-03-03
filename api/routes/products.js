@@ -68,9 +68,9 @@ router.post("/", (req, res, next) => {
 // })
 
 
-router.post("/pic", async (req, res, next) => {
-    //console.log(req.files)
-    console.log(req.body)
+router.post("/pic", checkAuth, async (req, res, next) => {
+    // console.log(req.files)
+    // console.log(req.body)
 
 
     const filePath = req.files.photo.tempFilePath
