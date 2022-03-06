@@ -1,6 +1,6 @@
 const app = require('./app')
 
-const sequelize = require('./config/db')
+const sequelize = require('./api/config/db')
 
 sequelize
     .sync()

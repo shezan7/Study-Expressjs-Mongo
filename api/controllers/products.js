@@ -1,55 +1,17 @@
-const fs = require('fs')
-const express = require('express')
-const req = require('express/lib/request')
-const router = express.Router()
+const mongoose = require("mongoose");
 
-const mongoose = require('mongoose')
-const ProductsController = require('../controllers/products')
+// const Order = require("../models/order");
+const Product = require("../models/product");
 
-const cloudinary = require('cloudinary')
+const sequelizeOrder = require('../sequelize-models/Product')
 
-cloudinary.config({
-    cloud_name: 'dkbtyznkd',
-    api_key: '459563487576644',
-    api_secret: '2e8QcuVAm9wJ3N31EkCxKGntoAQ',
-});
-
-
-const checkAuth = require('../middleware/check-auth')
-
-
-
-router.get("/", checkAuth, ProductsController.products_get_all);
-
-router.post("/", checkAuth, ProductsController.products_create);
-
-router.post("/pic", checkAuth, ProductsController.products_create_with_photo);
-
-router.get("/:productId", checkAuth, ProductsController.products_get_product_id);
-
-router.patch("/:productId", checkAuth, ProductsController.products_update);
-
-router.delete("/:productId", checkAuth, ProductsController.products_delete);
-
-
-
-module.exports = router
-
-
-
-
-
-/*
-router.get('/', (req, res, next) => {
+exports.products_get_all = (req, res, next) => {
     res.status(200).json({
         message: 'Handling GET requests to /products'
     })
-})
-*/
+}
 
-
-/*
-router.post("/", (req, res, next) => {
+exports.products_create = (req, res, next) => {
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
@@ -75,24 +37,9 @@ router.post("/", (req, res, next) => {
             })
         })
 
-    // res.status(200).json({
-    //              message: 'Handling POST requests to /products',
-    //              createProduct: product
-    //          })
+    }
 
-
-
-})
-
-*/
-
-
-
-/*
-router.post("/pic", checkAuth, async (req, res, next) => {
-    // console.log(req.files)
-    // console.log(req.body)
-
+exports.products_create_with_photo = async(req, res, next) => {
 
     const filePath = req.files.photo.tempFilePath
 
@@ -123,12 +70,9 @@ router.post("/pic", checkAuth, async (req, res, next) => {
                 error: err
             })
         })
-})
-*/
+}
 
-
-/*
-router.get('/:productId', (req, res, next) => {
+exports.products_get_product_id = (req, res, next) => {
     const id = req.params.productId
 
     Product.findById(id)
@@ -147,13 +91,9 @@ router.get('/:productId', (req, res, next) => {
             console.log(err)
             res.status(500).json({ error: err })
         })
-})
-*/
+}
 
-
-
-/*
-router.patch('/:productId', (req, res, next) => {
+exports.products_update = (req, res, next) => {
     const id = req.params.productId
 
     // Product.update({_id: id}, {$set: {name: req.body.newName, price: req.body.newPrice}})
@@ -175,19 +115,9 @@ router.patch('/:productId', (req, res, next) => {
             })
         })
 
-})
-*/
+}
 
-
-// router.patch('/:productId', (req, res, next) => {
-//     res.status(200).json({
-//         message: 'Updated product!'
-//     })
-// })
-
-
-/*
-router.delete('/:productId', (req, res, next) => {
+exports.products_delete = (req, res, next) => {
     const id = req.params.productId
     Product.remove({ _id: id })
         .exec()
@@ -200,12 +130,4 @@ router.delete('/:productId', (req, res, next) => {
                 error: err
             })
         })
-})
-*/
-
-
-// router.delete('/:productId', (req, res, next) => {
-//     res.status(200).json({
-//         message: 'Deleted product!'
-//     })
-// })
+}
