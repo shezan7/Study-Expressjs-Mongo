@@ -1,5 +1,12 @@
 const app = require('./app')
 
-const port = process.env.port || 3000
+const sequelize = require('./config/db')
 
-app.listen(port, () => console.log('Server running 3000'))
+sequelize
+    .sync()
+    .then(()=>{
+        console.log("Database postgreSQL connected!!!");
+        const port = process.env.port || 3000
+        app.listen(port, () => console.log('Server running 3000'))
+    })
+
