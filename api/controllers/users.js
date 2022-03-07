@@ -1,50 +1,11 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const router = express.Router()
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const mongoose = require("mongoose");
 
-const User = require('../models/user')
+const User = require("../models/user");
+// const Product = require("../models/product");
 
+const sequelizeOrder = require('../sequelize-models/User')
 
-router.post('/signup', (req, res, next) => {
-    
-    // const user = new User({
-    //     _id: new Mongoose.Types.ObjectId(),
-    //     email: req.body.email,
-    //     password: hash
-        
-        // bcrypt.hash(req.body.password, 10, (err, hash) => {
-        //     if(err) {
-        //         return res.status(500).json({
-        //             error: err
-        //         })
-        //     }
-        //     else {
-        //         const user = new User({
-        //             _id: new mongoose.Types.ObjectId(),
-        //             email: req.body.email,
-        //             password: hash 
-        //         })
-
-        //         user
-        //             .save()
-        //             .then(result => {
-        //                 console.log(result)
-        //                 res.status(201).json({
-        //                     message: 'User created'
-        //                 })
-        //             })
-        //             .catch(err => {
-        //                 console.log(err)
-        //                 res.status(500).json({
-        //                     error: err 
-        //                 })
-        //             })
-        //     }
-        // })
- // })
-
+exports.users_signup = (req, res, next) => {
     User.find({email: req.body.email})
         .exec()
         .then(user => {
@@ -85,10 +46,9 @@ router.post('/signup', (req, res, next) => {
                 })
             }
         })
+}
 
-})
-
-router.post('/login', (req, res, next) => {
+exports.users_login = (req, res, next) => {
     User.find({email: req.body.email})
         .exec()
         .then(user => {
@@ -130,7 +90,4 @@ router.post('/login', (req, res, next) => {
                 error: err 
             })
         })
-
-    })
-
-module.exports = router
+}

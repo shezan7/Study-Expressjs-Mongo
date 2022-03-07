@@ -2,13 +2,15 @@ const {DataTypes} = require('sequelize')
 
 const sequelize = require('../config/db');
 
+const {INTEGER, STRING} = DataTypes
+
 const order = sequelize.define('order', {
     product: {
-        type: DataTypes.STRING,
+        type: STRING,
         allowNull: false
     },
     quantity: {
-        type: DataTypes.INTEGER
+        type: INTEGER
         //allowNull: false
     }
 }, {

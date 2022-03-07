@@ -10,7 +10,7 @@ const fileUpload = require('express-fileupload')
 
 const productRoutes = require('./api/routes/products')
 const orderRoutes = require('./api/routes/orders')
-const userRoutes = require('./api/routes/user')
+const userRoutes = require('./api/routes/users')
  
 mongoose.connect('mongodb+srv://shezan7:' + process.env.MONGO_ATLAS_PW + '@cluster0.ic9ur.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 //' + process.env.MONGO_ATLAS_PW + '

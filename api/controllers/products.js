@@ -12,32 +12,35 @@ exports.products_get_all = (req, res, next) => {
 }
 
 exports.products_create = (req, res, next) => {
-    const product = new Product({
-        _id: new mongoose.Types.ObjectId(),
-        name: req.body.name,
-        price: req.body.price
-    })
+    console.log("products_create",req.body);
 
-    product
-        .save()
-        .then(result => {
-            console.log(result)
+    
+    // const product = new Product({
+    //     _id: new mongoose.Types.ObjectId(),
+    //     name: req.body.name,
+    //     price: req.body.price
+    // })
+
+    // product
+    //     .save()
+    //     .then(result => {
+    //         console.log(result)
 
 
-            res.status(200).json({
-                message: 'Handling POST requests to /products',
-                createProduct: result
-            })
+    //         res.status(200).json({
+    //             message: 'Handling POST requests to /products',
+    //             createProduct: result
+    //         })
 
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({
-                error: err
-            })
-        })
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //         res.status(500).json({
+    //             error: err
+    //         })
+    //     })
 
-    }
+}
 
 exports.products_create_with_photo = async(req, res, next) => {
 

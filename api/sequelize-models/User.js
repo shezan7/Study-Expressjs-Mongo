@@ -4,7 +4,7 @@ const sequelize = require('../config/db');
 
 const {INTEGER, STRING} = DataTypes
 
-const product = sequelize.define('product', {
+const user = sequelize.define('user', {
     name: {
         type: STRING,
         allowNull: false
@@ -20,4 +20,4 @@ const product = sequelize.define('product', {
     schema: "shezan"
 })
 
-module.exports = product 
+module.exports = user 
