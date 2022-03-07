@@ -1,45 +1,49 @@
 const mongoose = require("mongoose");
+const product = require("../models/product");
 
 // const Order = require("../models/order");
 const Product = require("../models/product");
 
-const sequelizeOrder = require('../sequelize-models/Product')
+const sequelizeProduct = require('../sequelize-models/Product')
 
-exports.products_get_all = (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling GET requests to /products'
-    })
+exports.products_get_all = async (req, res, next) => {
+    console.log("products",req.body);
+
+    try {
+        //const { id } = req.body;
+        const productAll = await sequelizeProduct.findAll({
+            // where: {
+            //     id
+            // }
+
+            attributes: ['id', 'name', 'price']
+        
+        })
+    
+        res.json({
+            message: productAll
+        })
+    } catch (error) {
+        next(error);
+    }
 }
 
-exports.products_create = (req, res, next) => {
+exports.products_create = async (req, res, next) => {
     console.log("products_create",req.body);
 
+    try {
+        const { name, price } = req.body;
+        const product = await sequelizeProduct.create({
+            name,
+            price,
+        })
     
-    // const product = new Product({
-    //     _id: new mongoose.Types.ObjectId(),
-    //     name: req.body.name,
-    //     price: req.body.price
-    // })
-
-    // product
-    //     .save()
-    //     .then(result => {
-    //         console.log(result)
-
-
-    //         res.status(200).json({
-    //             message: 'Handling POST requests to /products',
-    //             createProduct: result
-    //         })
-
-    //     })
-    //     .catch(err => {
-    //         console.log(err)
-    //         res.status(500).json({
-    //             error: err
-    //         })
-    //     })
-
+        res.json({
+            data: product
+        })
+    } catch (error) {
+        next(error);
+    }
 }
 
 exports.products_create_with_photo = async(req, res, next) => {
@@ -75,62 +79,66 @@ exports.products_create_with_photo = async(req, res, next) => {
         })
 }
 
-exports.products_get_product_id = (req, res, next) => {
-    const id = req.params.productId
+exports.products_get_product_id = async (req, res, next) => {
+    console.log("product_id",req.body);
 
-    Product.findById(id)
-        .exec()
-        .then(doc => {
-            console.log("From database", doc)
-            // res.status(200).json(doc)
-            if (doc) {
-                res.status(200).json(doc)
-            }
-            else {
-                res.status(404).json({ message: 'No valid entry found for provided ID' })
+    try {
+        const { id } = req.body;
+        await sequelizeProduct.findAll({
+            where: {
+                id
             }
         })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({ error: err })
+    
+        res.json({
+            message: "Product find successfully"
         })
-}
-
-exports.products_update = (req, res, next) => {
-    const id = req.params.productId
-
-    // Product.update({_id: id}, {$set: {name: req.body.newName, price: req.body.newPrice}})
-
-    const updateOperation = {}
-    for (const operation of req.body) {
-        updateOperation[operation.propName] = operation.value
+    } catch (error) {
+        next(error);
     }
-    Product.update({ _id: id }, { $set: updateOperation })
-        .exec()
-        .then(result => {
-            console.log(result)
-            res.status(200).json(result)
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({
-                error: err
-            })
-        })
-
 }
 
-exports.products_delete = (req, res, next) => {
-    const id = req.params.productId
-    Product.remove({ _id: id })
-        .exec()
-        .then(result => {
-            res.status(200).json(result)
+exports.products_update = async (req, res, next) => {
+    console.log("products_updated",req.body);
+
+    try {
+        const { id, name, price } = req.body;
+        // const product = await sequelizeProduct.create({
+        //     name,
+        //     price,
+        // })
+        await sequelizeProduct.update({
+            name,
+            price
+        }, {
+            where: {
+                id
+            }
         })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({
-                error: err
-            })
+    
+        res.json({
+            message: "Updated successfully"
         })
+    } catch (error) {
+        next(error);
+    }
+}
+
+exports.products_delete = async (req, res, next) => {
+    console.log("products_deleted",req.body);
+
+    try {
+        const { id } = req.body;
+        await sequelizeProduct.destroy({
+            where: {
+                id
+            }
+        })
+    
+        res.json({
+            message: "Deleted successfully"
+        })
+    } catch (error) {
+        next(error);
+    }
 }

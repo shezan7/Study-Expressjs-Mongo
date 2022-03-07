@@ -6,7 +6,7 @@ sequelize
     .sync()
     .then(()=>{
         console.log("Database postgreSQL connected!!!");
-        const port = process.env.port || 3000
-        app.listen(port, () => console.log('Server running 3000'))
+        const port = process.env.Port || 3000
+        app.listen(port, () => console.log(`Server running ${port}`))
     })
 

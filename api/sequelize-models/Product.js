@@ -17,7 +17,8 @@ const product = sequelize.define('product', {
         type: STRING
     }
 }, {
-    schema: "shezan"
+    schema: "shezan",
+    timestamps: true
 })
 
 module.exports = product 
