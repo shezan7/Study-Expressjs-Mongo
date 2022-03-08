@@ -5,16 +5,13 @@ const sequelize = require('../config/db');
 const {INTEGER, STRING} = DataTypes
 
 const user = sequelize.define('user', {
-    name: {
+    email: {
         type: STRING,
         allowNull: false
     },
-    price: {
+    password: {
         type: INTEGER,
         allowNull: false
-    },
-    image: {
-        type: STRING
     }
 }, {
     schema: "shezan"

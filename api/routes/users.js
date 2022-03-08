@@ -11,9 +11,9 @@ const User = require('../models/user')
 const UsersController = require('../controllers/users');
 
 
-router.post("/signup", checkAuth, UsersController.users_signup);
+router.post("/signup", UsersController.users_signup);
 
-router.post("/login", checkAuth, UsersController.users_login);
+router.post("/login", UsersController.users_login);
 
 
 module.exports = router

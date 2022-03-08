@@ -33,13 +33,16 @@ exports.products_create = async (req, res, next) => {
 
     try {
         const { name, price } = req.body;
-        const product = await sequelizeProduct.create({
+        const newProduct = await sequelizeProduct.create({
             name,
             price,
+
+            // attributes: ['id', 'name', 'price']
+
         })
     
         res.json({
-            data: product
+            data: newProduct
         })
     } catch (error) {
         next(error);
@@ -84,14 +87,15 @@ exports.products_get_product_id = async (req, res, next) => {
 
     try {
         const { id } = req.body;
-        await sequelizeProduct.findAll({
+        const productId = await sequelizeProduct.findAll({
+            attributes: ['id', 'name', 'price'],
             where: {
                 id
             }
         })
     
         res.json({
-            message: "Product find successfully"
+            message: "ProductId find successfully", productId
         })
     } catch (error) {
         next(error);
