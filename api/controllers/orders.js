@@ -18,9 +18,16 @@ exports.orders_get_all = async (req, res, next) => {
         res.json({
             message: orderAll
         })
-    } catch (error) {
-        next(error);
-    }
+    } 
+    // catch (error) {
+    //     next(error);
+    // }
+    catch (err) {
+      console.log(err)
+      res.status(500).json({
+          error: err 
+      })
+  }
 };
 
 exports.orders_create_order = async (req, res, next) => {
@@ -38,9 +45,16 @@ exports.orders_create_order = async (req, res, next) => {
             data: "New Order created successfully" 
             //newOrder
         })
-    } catch (error) {
-        next(error);
-    }
+    } 
+    // catch (error) {
+    //     next(error);
+    // }
+    catch (err) {
+      console.log(err)
+      res.status(500).json({
+          error: err 
+      })
+  }
   
 };
 
@@ -59,9 +73,16 @@ exports.orders_get_order = async (req, res, next) => {
         res.json({
             message: "orderId find successfully", orderId
         })
-    } catch (error) {
-        next(error);
-    }
+    } 
+    // catch (error) {
+    //     next(error);
+    // }
+    catch (err) {
+      console.log(err)
+      res.status(500).json({
+          error: err 
+      })
+  }
 };
 
 exports.orders_delete_order = async (req, res, next) => {
@@ -78,7 +99,14 @@ exports.orders_delete_order = async (req, res, next) => {
         res.json({
             message: "Deleted successfully"
         })
-    } catch (error) {
-        next(error);
-    }
+    } 
+    // catch (error) {
+    //     next(error);
+    // }
+    catch (err) {
+      console.log(err)
+      res.status(500).json({
+          error: err 
+      })
+  }
 };

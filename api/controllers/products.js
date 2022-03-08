@@ -23,8 +23,15 @@ exports.products_get_all = async (req, res, next) => {
         res.json({
             message: productAll
         })
-    } catch (error) {
-        next(error);
+    } 
+    // catch (error) {
+    //     next(error);
+    // }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err 
+        })
     }
 }
 
@@ -45,8 +52,15 @@ exports.products_create = async (req, res, next) => {
             data: "New Product created successfully",
             //newProduct
         })
-    } catch (error) {
-        next(error);
+    } 
+    // catch (error) {
+    //     next(error);
+    // }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err 
+        })
     }
 }
 
@@ -98,8 +112,15 @@ exports.products_get_product_id = async (req, res, next) => {
         res.json({
             message: "ProductId find successfully", productId
         })
-    } catch (error) {
-        next(error);
+    } 
+    // catch (error) {
+    //     next(error);
+    // }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err 
+        })
     }
 }
 
@@ -124,8 +145,15 @@ exports.products_update = async (req, res, next) => {
         res.json({
             message: "Updated successfully"
         })
-    } catch (error) {
-        next(error);
+    } 
+    // catch (error) {
+    //     next(error);
+    // }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err 
+        })
     }
 }
 
@@ -143,7 +171,14 @@ exports.products_delete = async (req, res, next) => {
         res.json({
             message: "Deleted successfully"
         })
-    } catch (error) {
-        next(error);
+    } 
+    // catch (error) {
+    //     next(error);
+    // }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err 
+        })
     }
 }

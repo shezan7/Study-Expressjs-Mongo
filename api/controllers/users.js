@@ -18,9 +18,18 @@ exports.users_signup = async (req, res, next) => {
         res.json({
             data: "User registered successfully", newUser
         })
-    } catch (error) {
-        next(error);
+    } 
+    // catch (error) {
+    //     next(error);
+    // }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err 
+        })
     }
+    
+    
 
 
 
@@ -85,8 +94,15 @@ exports.users_login = async (req, res, next) => {
         res.json({
             data: "User login successfull", User
         })
-    } catch (error) {
-        next(error);
+    } 
+    // catch (error) {
+    //     next(error);
+    // }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err 
+        })
     }
 
 
