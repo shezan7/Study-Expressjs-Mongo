@@ -15,6 +15,8 @@ router.post("/signup", UsersController.users_signup);
 
 router.post("/login", UsersController.users_login);
 
+router.delete("/", UsersController.users_delete);
+
 
 module.exports = router
 

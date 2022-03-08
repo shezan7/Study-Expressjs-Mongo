@@ -14,7 +14,8 @@ const order = sequelize.define('order', {
         //allowNull: false
     }
 }, {
-    schema: "shezan"
+    schema: "shezan",
+    timestamps: true
 })
 
 module.exports = order 
