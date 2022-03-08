@@ -42,7 +42,8 @@ exports.products_create = async (req, res, next) => {
         })
     
         res.json({
-            data: newProduct
+            data: "New Product created successfully",
+            //newProduct
         })
     } catch (error) {
         next(error);

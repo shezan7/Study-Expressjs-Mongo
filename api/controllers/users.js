@@ -75,7 +75,7 @@ exports.users_login = async (req, res, next) => {
         const { email, password } = req.body;
         const User = await sequelizeUser.findOne({
             
-            attributes: ['email', 'password'],
+            attributes: ['email'],
             
             where: {
                 email

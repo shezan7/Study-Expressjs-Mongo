@@ -35,7 +35,8 @@ exports.orders_create_order = async (req, res, next) => {
         })
     
         res.json({
-            data: newOrder
+            data: "New Order created successfully" 
+            //newOrder
         })
     } catch (error) {
         next(error);
