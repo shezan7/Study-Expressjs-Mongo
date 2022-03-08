@@ -69,21 +69,25 @@ exports.users_signup = async (req, res, next) => {
 
 exports.users_login = async (req, res, next) => {
     
-    // console.log("users_login",req.body);
+    console.log("users_login",req.body);
 
-    // try {
-    //     const { email, password } = req.body;
-    //     const User = await sequelizeUser.create({
-    //         email,
-    //         password
-    //     })
+    try {
+        const { email, password } = req.body;
+        const User = await sequelizeUser.findOne({
+            
+            attributes: ['email', 'password'],
+            
+            where: {
+                email
+            }
+        })
     
-    //     res.json({
-    //         data: "User login successfull", User
-    //     })
-    // } catch (error) {
-    //     next(error);
-    // }
+        res.json({
+            data: "User login successfull", User
+        })
+    } catch (error) {
+        next(error);
+    }
 
 
 
