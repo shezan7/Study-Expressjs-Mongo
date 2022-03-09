@@ -1,12 +1,10 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const router = express.Router()
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+// const bcrypt = require('bcrypt')
+// const jwt = require('jsonwebtoken')
 
 const checkAuth = require('../middleware/check-auth');
-
-const User = require('../models/user')
 
 const UsersController = require('../controllers/users');
 
@@ -15,7 +13,7 @@ router.post("/signup", UsersController.users_signup);
 
 router.post("/login", UsersController.users_login);
 
-router.delete("/", UsersController.users_delete);
+// router.delete("/", UsersController.users_delete);
 
 
 module.exports = router

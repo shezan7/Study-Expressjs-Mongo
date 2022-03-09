@@ -21,15 +21,15 @@ const checkAuth = require('../middleware/check-auth')
 
 router.get("/", ProductsController.products_get_all);
 
-router.post("/", ProductsController.products_create);
+router.post("/", checkAuth, ProductsController.products_create);
 
-router.post("/pic", checkAuth, ProductsController.products_create_with_photo);
+// router.post("/pic", checkAuth, ProductsController.products_create_with_photo);
 
 router.get("/id", ProductsController.products_get_product_id);
 
-router.patch("/", ProductsController.products_update);
+router.patch("/", checkAuth, ProductsController.products_update);
 
-router.delete("/", ProductsController.products_delete);
+router.delete("/", checkAuth, ProductsController.products_delete);
 
 
 

@@ -7,11 +7,11 @@ const OrdersController = require('../controllers/orders');
 // Handle incoming GET requests to /orders
 router.get("/", OrdersController.orders_get_all);
 
-router.post("/", OrdersController.orders_create_order);
+router.post("/", checkAuth, OrdersController.orders_create_order);
 
 router.get("/id", OrdersController.orders_get_order);
 
-router.delete("/", OrdersController.orders_delete_order);
+router.delete("/", checkAuth, OrdersController.orders_delete_order);
 
 module.exports = router;
 
