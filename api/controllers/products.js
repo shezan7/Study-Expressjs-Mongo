@@ -7,7 +7,7 @@ const Product = require("../models/product");
 const sequelizeProduct = require('../sequelize-models/Product')
 
 exports.products_get_all = async (req, res, next) => {
-    console.log("products",req.body);
+    console.log("products", req.body);
 
     try {
         //const { id } = req.body;
@@ -17,54 +17,61 @@ exports.products_get_all = async (req, res, next) => {
             // }
 
             attributes: ['id', 'name', 'price']
-        
+
         })
-    
+
         res.json({
             message: productAll
         })
-    } 
+    }
     // catch (error) {
     //     next(error);
     // }
     catch (err) {
         console.log(err)
         res.status(500).json({
-            error: err 
+            error: err
         })
     }
 }
 
 exports.products_create = async (req, res, next) => {
-    console.log("products_create",req.body);
+    console.log("products_create", req.body);
 
     try {
-        const { name, price } = req.body;
-        const newProduct = await sequelizeProduct.create({
-            name,
-            price,
+        const { name, price, role } = req.body;
+        if (role == "admin") {
+            const newProduct = await sequelizeProduct.create({
+                name,
+                price
+            })
 
-            // attributes: ['id', 'name', 'price']
+            res.json({
+                data: "New Product created successfully",
+                //newProduct
+            })
+        }
+        else {
+            res.json({
+                data: "You have no access to create product"
+                //newProduct
+            })
+        }
 
-        })
-    
-        res.json({
-            data: "New Product created successfully",
-            //newProduct
-        })
-    } 
+
+    }
     // catch (error) {
     //     next(error);
     // }
     catch (err) {
         console.log(err)
         res.status(500).json({
-            error: err 
+            error: err
         })
     }
 }
 
-exports.products_create_with_photo = async(req, res, next) => {
+exports.products_create_with_photo = async (req, res, next) => {
 
     const filePath = req.files.photo.tempFilePath
 
@@ -98,7 +105,7 @@ exports.products_create_with_photo = async(req, res, next) => {
 }
 
 exports.products_get_product_id = async (req, res, next) => {
-    console.log("product_id",req.body);
+    console.log("product_id", req.body);
 
     try {
         const { id } = req.body;
@@ -108,24 +115,24 @@ exports.products_get_product_id = async (req, res, next) => {
                 id
             }
         })
-    
+
         res.json({
             message: "ProductId find successfully", productId
         })
-    } 
+    }
     // catch (error) {
     //     next(error);
     // }
     catch (err) {
         console.log(err)
         res.status(500).json({
-            error: err 
+            error: err
         })
     }
 }
 
 exports.products_update = async (req, res, next) => {
-    console.log("products_updated",req.body);
+    console.log("products_updated", req.body);
 
     try {
         const { id, name, price } = req.body;
@@ -141,24 +148,24 @@ exports.products_update = async (req, res, next) => {
                 id
             }
         })
-    
+
         res.json({
             message: "Updated successfully"
         })
-    } 
+    }
     // catch (error) {
     //     next(error);
     // }
     catch (err) {
         console.log(err)
         res.status(500).json({
-            error: err 
+            error: err
         })
     }
 }
 
 exports.products_delete = async (req, res, next) => {
-    console.log("products_deleted",req.body);
+    console.log("products_deleted", req.body);
 
     try {
         const { id } = req.body;
@@ -167,18 +174,18 @@ exports.products_delete = async (req, res, next) => {
                 id
             }
         })
-    
+
         res.json({
             message: "Deleted successfully"
         })
-    } 
+    }
     // catch (error) {
     //     next(error);
     // }
     catch (err) {
         console.log(err)
         res.status(500).json({
-            error: err 
+            error: err
         })
     }
 }

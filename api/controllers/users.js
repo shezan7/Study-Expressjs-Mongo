@@ -3,7 +3,6 @@ const sequelizeUser = require('../sequelize-models/User')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-
 exports.users_signup = async (req, res, next) => {
     console.log("users_register", req.body);
     const { email, password, role } = req.body;
@@ -57,14 +56,21 @@ exports.users_login = async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
-        const user = await sequelizeUser.findOne({
-            where: { email, password }
-        })
+        const user = await sequelizeUser.findAll(
+            {
+                where: {
+                    email: email,
 
+                }
+            }
+        )
+
+        // console.log(user);
         if (!user) {
             return res.status(404).send({ message: "User Not found." });
         }
-        if (user.password !== password) {
+
+        if (user.password == bcrypt.hashSync(password, 12)) {
             return res.status(401).send({
                 message: "Invalid Password!"
             });
