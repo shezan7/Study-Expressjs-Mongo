@@ -6,11 +6,27 @@ const jwt = require('jsonwebtoken')
 
 exports.users_signup = async (req, res, next) => {
     console.log("users_register", req.body);
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
+    let isAdmin = false;
     try {
+        switch (role) {
+            case 'admin':
+                isAdmin = true
+                break;
+            case 'user':
+                isAdmin = false
+                break;
+            default:
+                const error = new Error;
+                error.status = 'Sorry, You are not a valid user';
+                throw error;
+        }
+
         const newUser = await sequelizeUser.create({
             email: email,
-            password: bcrypt.hashSync(password, 12)
+            password: bcrypt.hashSync(password, 12),
+            role: role,
+            isAdmin: isAdmin
         })
 
         if (!newUser) {
@@ -41,16 +57,15 @@ exports.users_login = async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
-        const user = await sequelizeUser.findAll({
-            where: { email }
+        const user = await sequelizeUser.findOne({
+            where: { email, password }
         })
 
         if (!user) {
             return res.status(404).send({ message: "User Not found." });
         }
-        if (user.password != password) {
+        if (user.password !== password) {
             return res.status(401).send({
-                // accessToken: null,
                 message: "Invalid Password!"
             });
         }
@@ -69,10 +84,6 @@ exports.users_login = async (req, res, next) => {
         })
     }
 
-
-    // catch (error) {
-    //     next(error);
-    // }
     catch (err) {
         console.log(err)
         res.status(500).json({
@@ -85,25 +96,17 @@ exports.users_login = async (req, res, next) => {
 exports.users_delete = async (req, res, next) => {
     console.log("users_remove", req.body);
 
-    // try {
-    //     const { id } = req.body;
-    //     await sequelizeUser.destroy({
-    //         where: {
-    //             id
-    //         }
-    //     })
-
-    //     res.status(200).json({
-    //         message: "User removed successfully"
-    //     })
-
     const { id } = req.body;
     try {
-        await sequelizeUser.destroy({
+        const user = await sequelizeUser.destroy({
             where: {
                 id
             }
         })
+
+        if (!user) {
+            return res.status(404).send({ message: "User is not found for deleting" });
+        }
 
         res.status(200).json({
             message: "User removed successfully"
