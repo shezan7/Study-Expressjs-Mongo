@@ -14,6 +14,7 @@ cloudinary.config({
 });
 
 const checkAuth = require('../middleware/check-auth')
+
 router.use(checkAuth);
 
 router.get("/", ProductsController.products_get_all);

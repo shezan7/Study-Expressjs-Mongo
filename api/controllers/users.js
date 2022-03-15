@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 
 exports.users_signup = async (req, res, next) => {
     console.log("users_register", req.body);
-    const { email, password, role } = req.body;
+    const { email, password } = req.body;
     // let isAdmin = false;
     try {
         // switch (role) {
@@ -24,7 +24,7 @@ exports.users_signup = async (req, res, next) => {
         const newUser = await sequelizeUser.create({
             email: email,
             password: bcrypt.hashSync(password, 12),
-            role: role,
+            // role: role,
             // isAdmin: isAdmin
         })
 
@@ -75,8 +75,7 @@ exports.users_login = async (req, res, next) => {
 
         const jwtToken = jwt.sign({
             id: user.id,
-            // email: user.email,
-            role: user.role
+            role: user.role,
         },
             process.env.JWT_KEY,
             {
@@ -117,6 +116,42 @@ exports.users_delete = async (req, res, next) => {
             message: "User removed successfully"
         })
 
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err
+        })
+    }
+}
+
+exports.make_admin = async (req, res, next) => {
+    console.log("users_info", req.body);
+
+    console.log(req.role)
+    if (req.role !== 'admin') {
+        const error = new Error("Permission denied!");
+        error.statusCode = 401;
+        return next(error);
+    }
+
+    const { id } = req.body;
+    try {
+        const user = await sequelizeUser.update({
+            role: 'editor',
+        }, {
+            where: {
+                id
+            }
+        })
+
+        if (!user) {
+            return res.status(404).send({ message: "Smething went wrong!" });
+        }
+
+        res.status(200).json({
+            message: "Updated successfully"
+        })
 
     } catch (err) {
         console.log(err)

@@ -28,6 +28,18 @@ exports.products_create = async (req, res, next) => {
 
     try {
         const { name, price } = req.body;
+
+        const newProduct = await sequelizeProduct.create({
+            name,
+            price
+        })
+
+        res.json({
+            data: "New Product created successfully",
+            newProduct
+        })
+
+
         // if (role == "admin") {
         //     const newProduct = await sequelizeProduct.create({
         //         name,
@@ -45,15 +57,6 @@ exports.products_create = async (req, res, next) => {
         //     })
         // }
 
-        const newProduct = await sequelizeProduct.create({
-            name,
-            price
-        })
-
-        res.json({
-            data: "New Product created successfully",
-            newProduct
-        })
     }
     // catch (error) {
     //     next(error);
@@ -132,6 +135,20 @@ exports.products_update = async (req, res, next) => {
     try {
         const { id, name, price } = req.body;
 
+        await sequelizeProduct.update({
+            name,
+            price
+        }, {
+            where: {
+                id
+            }
+        })
+
+        res.json({
+            message: "Updated successfully"
+        })
+
+
         // if (role == "admin") {
         //     await sequelizeProduct.update({
         //         name,
@@ -150,18 +167,6 @@ exports.products_update = async (req, res, next) => {
 
         // }
 
-        await sequelizeProduct.update({
-            name,
-            price
-        }, {
-            where: {
-                id
-            }
-        })
-
-        res.json({
-            message: "Updated successfully"
-        })
     }
     // catch (error) {
     //     next(error);

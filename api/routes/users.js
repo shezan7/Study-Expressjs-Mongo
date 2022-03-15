@@ -1,5 +1,4 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const router = express.Router()
 // const bcrypt = require('bcrypt')
 // const jwt = require('jsonwebtoken')
@@ -13,11 +12,12 @@ router.post("/signup", UsersController.users_signup);
 
 router.post("/login", UsersController.users_login);
 
+router.patch("/make-admin", checkAuth, UsersController.make_admin);
+
 router.delete("/", UsersController.users_delete);
 
 
 module.exports = router
-
 
 /*
 router.post('/signup', (req, res, next) => {

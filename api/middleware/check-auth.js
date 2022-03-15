@@ -1,17 +1,38 @@
 const jwt = require('jsonwebtoken')
 
-module.exports = (req, res, next) => {
-    try {
-        // const decoded = jwt.verify(req.body.token, process.env.JWT_KEY)
-        const token = req.get("Authorization").split(" ")[1];
-        const decoded = jwt.verify(token, process.env.JWT_KEY)
-        req.userData = decoded;
-        next();
-    } catch (error) {
-        console.log(req.body);
-
-        return res.status(401).json({
-            message: 'Auth failed'
-        })
+const AuthorizedUser = async (req, res, next) => {
+    const authHeader = req.get("Authorization");
+    if (!authHeader) {
+        const error = new Error("Not authenticated.");
+        error.flag = true;
+        error.statusCode = 401;
+        return next(error);
     }
-}
+    const token = authHeader.split(" ")[1];
+
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(token, process.env.JWT_KEY);
+    } catch (error) {
+        if (error.message === "jwt expired") {
+            error.message = "Session Expired";
+        }
+        error.statusCode = 500;
+        return next(error);
+    }
+
+    if (!decodedToken) {
+        const error = new Error("Not authenticated");
+        error.statusCode = 401;
+        return next(error);
+    }
+
+    console.log(decodedToken)
+    // Grant access to protect route
+    const { id, role } = decodedToken;
+    req.user = id;
+    req.role = role;
+    return next();
+};
+
+module.exports = AuthorizedUser;
