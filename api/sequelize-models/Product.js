@@ -1,8 +1,8 @@
-const {DataTypes} = require('sequelize')
+const { DataTypes } = require('sequelize')
 
 const sequelize = require('../config/db');
 
-const {INTEGER, STRING} = DataTypes
+const { INTEGER, STRING } = DataTypes
 
 const product = sequelize.define('product', {
     name: {
@@ -13,9 +13,9 @@ const product = sequelize.define('product', {
         type: INTEGER,
         allowNull: false
     },
-    image: {
-        type: STRING
-    }
+    // image: {
+    //     type: STRING
+    // }
 }, {
     schema: "shezan",
     timestamps: true

@@ -3,7 +3,6 @@ const express = require('express')
 const req = require('express/lib/request')
 const router = express.Router()
 
-const mongoose = require('mongoose')
 const ProductsController = require('../controllers/products')
 
 const cloudinary = require('cloudinary')
@@ -14,22 +13,20 @@ cloudinary.config({
     api_secret: '2e8QcuVAm9wJ3N31EkCxKGntoAQ',
 });
 
-
 const checkAuth = require('../middleware/check-auth')
-
-
+router.use(checkAuth);
 
 router.get("/", ProductsController.products_get_all);
 
-router.post("/", checkAuth, ProductsController.products_create);
+router.post("/", ProductsController.products_create);
 
 // router.post("/pic", checkAuth, ProductsController.products_create_with_photo);
 
-router.get("/id", ProductsController.products_get_product_id);
+// router.get("/id", ProductsController.products_get_product_id);
 
-router.patch("/", checkAuth, ProductsController.products_update);
+router.patch("/", ProductsController.products_update);
 
-router.delete("/", checkAuth, ProductsController.products_delete);
+router.delete("/", ProductsController.products_delete);
 
 
 

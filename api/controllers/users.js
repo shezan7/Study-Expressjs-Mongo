@@ -6,26 +6,26 @@ const jwt = require('jsonwebtoken')
 exports.users_signup = async (req, res, next) => {
     console.log("users_register", req.body);
     const { email, password, role } = req.body;
-    let isAdmin = false;
+    // let isAdmin = false;
     try {
-        switch (role) {
-            case 'admin':
-                isAdmin = true
-                break;
-            case 'user':
-                isAdmin = false
-                break;
-            default:
-                const error = new Error;
-                error.status = 'Sorry, You are not a valid user';
-                throw error;
-        }
+        // switch (role) {
+        //     case 'admin':
+        //         isAdmin = true
+        //         break;
+        //     case 'user':
+        //         isAdmin = false
+        //         break;
+        //     default:
+        //         const error = new Error;
+        //         error.status = 'Sorry, You are not a valid user';
+        //         throw error;
+        // }
 
         const newUser = await sequelizeUser.create({
             email: email,
             password: bcrypt.hashSync(password, 12),
             role: role,
-            isAdmin: isAdmin
+            // isAdmin: isAdmin
         })
 
         if (!newUser) {
@@ -56,14 +56,11 @@ exports.users_login = async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
-        const user = await sequelizeUser.findAll(
-            {
-                where: {
-                    email: email,
-
-                }
+        const user = await sequelizeUser.findOne({
+            where: {
+                email: email,
             }
-        )
+        })
 
         // console.log(user);
         if (!user) {
@@ -75,9 +72,11 @@ exports.users_login = async (req, res, next) => {
                 message: "Invalid Password!"
             });
         }
+
         const jwtToken = jwt.sign({
             id: user.id,
-            email: user.email
+            // email: user.email,
+            role: user.role
         },
             process.env.JWT_KEY,
             {

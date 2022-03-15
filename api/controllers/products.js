@@ -1,23 +1,11 @@
-const mongoose = require("mongoose");
-const product = require("../models/product");
-
-// const Order = require("../models/order");
-const Product = require("../models/product");
-
 const sequelizeProduct = require('../sequelize-models/Product')
 
 exports.products_get_all = async (req, res, next) => {
     console.log("products", req.body);
 
     try {
-        //const { id } = req.body;
         const productAll = await sequelizeProduct.findAll({
-            // where: {
-            //     id
-            // }
-
             attributes: ['id', 'name', 'price']
-
         })
 
         res.json({
@@ -54,11 +42,8 @@ exports.products_create = async (req, res, next) => {
         else {
             res.json({
                 data: "You have no access to create product"
-                //newProduct
             })
         }
-
-
     }
     // catch (error) {
     //     next(error);
@@ -136,22 +121,41 @@ exports.products_update = async (req, res, next) => {
 
     try {
         const { id, name, price } = req.body;
+
+        if (role == "admin") {
+            await sequelizeProduct.update({
+                name,
+                price
+            }, {
+                where: {
+                    id
+                }
+            })
+
+            res.json({
+                message: "Updated successfully"
+            })
+        }
+        else {
+
+        }
+
         // const product = await sequelizeProduct.create({
         //     name,
         //     price,
         // })
-        await sequelizeProduct.update({
-            name,
-            price
-        }, {
-            where: {
-                id
-            }
-        })
+        // await sequelizeProduct.update({
+        //     name,
+        //     price
+        // }, {
+        //     where: {
+        //         id
+        //     }
+        // })
 
-        res.json({
-            message: "Updated successfully"
-        })
+        // res.json({
+        //     message: "Updated successfully"
+        // })
     }
     // catch (error) {
     //     next(error);
