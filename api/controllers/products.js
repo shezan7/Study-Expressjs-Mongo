@@ -27,23 +27,33 @@ exports.products_create = async (req, res, next) => {
     console.log("products_create", req.body);
 
     try {
-        const { name, price, role } = req.body;
-        if (role == "admin") {
-            const newProduct = await sequelizeProduct.create({
-                name,
-                price
-            })
+        const { name, price } = req.body;
+        // if (role == "admin") {
+        //     const newProduct = await sequelizeProduct.create({
+        //         name,
+        //         price
+        //     })
 
-            res.json({
-                data: "New Product created successfully",
-                //newProduct
-            })
-        }
-        else {
-            res.json({
-                data: "You have no access to create product"
-            })
-        }
+        //     res.json({
+        //         data: "New Product created successfully",
+        //         //newProduct
+        //     })
+        // }
+        // else {
+        //     res.json({
+        //         data: "You have no access to create product"
+        //     })
+        // }
+
+        const newProduct = await sequelizeProduct.create({
+            name,
+            price
+        })
+
+        res.json({
+            data: "New Product created successfully",
+            newProduct
+        })
     }
     // catch (error) {
     //     next(error);
@@ -122,40 +132,36 @@ exports.products_update = async (req, res, next) => {
     try {
         const { id, name, price } = req.body;
 
-        if (role == "admin") {
-            await sequelizeProduct.update({
-                name,
-                price
-            }, {
-                where: {
-                    id
-                }
-            })
+        // if (role == "admin") {
+        //     await sequelizeProduct.update({
+        //         name,
+        //         price
+        //     }, {
+        //         where: {
+        //             id
+        //         }
+        //     })
 
-            res.json({
-                message: "Updated successfully"
-            })
-        }
-        else {
+        //     res.json({
+        //         message: "Updated successfully"
+        //     })
+        // }
+        // else {
 
-        }
+        // }
 
-        // const product = await sequelizeProduct.create({
-        //     name,
-        //     price,
-        // })
-        // await sequelizeProduct.update({
-        //     name,
-        //     price
-        // }, {
-        //     where: {
-        //         id
-        //     }
-        // })
+        await sequelizeProduct.update({
+            name,
+            price
+        }, {
+            where: {
+                id
+            }
+        })
 
-        // res.json({
-        //     message: "Updated successfully"
-        // })
+        res.json({
+            message: "Updated successfully"
+        })
     }
     // catch (error) {
     //     next(error);
