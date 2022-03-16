@@ -13,37 +13,5 @@ router.get("/id", OrdersController.orders_get_order);
 
 router.delete("/", checkAuth, OrdersController.orders_delete_order);
 
+
 module.exports = router;
-
-
-
-// const express = require('express')
-// const router = express.Router()
-
-// router.get('/', (req, res, next) => {
-//     res.status(200).json({
-//         message: 'Order were fetched'
-//     })
-// })
-
-// router.post('/', (req, res, next) => {
-//     res.status(201).json({
-//         message: 'Order was created'
-//     })
-// })
-
-// router.get('/:orderId', (req, res, next) => {
-//     res.status(201).json({
-//         message: 'Order details',
-//         orderId: req.params.orderId
-//     })
-// })
-
-// router.delete('/:orderId', (req, res, next) => {
-//     res.status(201).json({
-//         message: 'Order deleted',
-//         orderId: req.params.orderId
-//     })
-// })
-
-// module.exports = router
