@@ -165,11 +165,14 @@ exports.products_delete = async (req, res, next) => {
     else {
         try {
             const { id } = req.body;
-            await sequelizeProduct.destroy({
+            const product = await sequelizeProduct.destroy({
                 where: {
                     id
                 }
             })
+            if (!product) {
+                return res.status(404).send({ message: "Product is not found for deleting" });
+            }
             res.json({
                 message: "Product deleted successfully"
             })

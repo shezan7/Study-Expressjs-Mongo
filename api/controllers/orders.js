@@ -81,23 +81,22 @@ exports.orders_get_order = async (req, res, next) => {
 };
 
 exports.orders_delete_order = async (req, res, next) => {
-    console.log("products_deleted", req.body);
+    console.log("orders_deleted", req.body);
 
     try {
         const { id } = req.body;
-        await sequelizeOrder.destroy({
+        const order = await sequelizeOrder.destroy({
             where: {
                 id
             }
         })
-
+        if (!order) {
+            return res.status(404).send({ message: "Order is not found for deleting" });
+        }
         res.json({
-            message: "Deleted successfully"
+            message: "Order deleted successfully"
         })
     }
-    // catch (error) {
-    //     next(error);
-    // }
     catch (err) {
         console.log(err)
         res.status(500).json({
