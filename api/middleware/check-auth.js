@@ -27,11 +27,7 @@ const AuthorizedUser = async (req, res, next) => {
         return next(error);
     }
 
-    console.log(decodedToken)
-    // Grant access to protect route
-    const { id, role } = decodedToken;
-    req.user = id;
-    req.role = role;
+    req.user = decodedToken;
     return next();
 };
 

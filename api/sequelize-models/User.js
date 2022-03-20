@@ -13,10 +13,10 @@ const user = sequelize.define('user', {
         type: STRING,
         allowNull: false
     },
-    role: {
-        type: STRING,
-        // allowNull: false
-    },
+    // role: {
+    //     type: STRING,
+    //     // allowNull: false
+    // },
     // isAdmin: {
     //     type: BOOLEAN
     // }
