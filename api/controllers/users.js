@@ -30,6 +30,7 @@ exports.users_signup = async (req, res, next) => {
     }
 }
 
+
 exports.users_login = async (req, res, next) => {
 
     console.log("users_login", req.body);
@@ -39,7 +40,7 @@ exports.users_login = async (req, res, next) => {
     try {
         const user = await sequelizeUser.findOne({
             where: {
-                email: email,
+                email: email
             }
         })
 
@@ -81,37 +82,61 @@ exports.make_admin = async (req, res, next) => {
 
     const { id } = req.body;
     console.log(req.role)
-    if (req.role !== 'admin') {
-        const error = new Error("Permission denied!");
-        error.statusCode = 401;
-        return next(error);
-    }
-
-    else {
-        try {
-            const user = await sequelizeUser.update({
-                role: 'editor',
-            }, {
-                where: {
-                    id
-                }
-            })
-
-            if (!user) {
-                return res.status(404).send({ message: "No user found for making admin" });
+    try {
+        const user = await sequelizeUser.update({
+            role: 'editor',
+        }, {
+            where: {
+                id
             }
+        })
 
-            res.status(200).json({
-                message: "Make admin successfull"
-            })
-
-        } catch (err) {
-            console.log(err)
-            res.status(500).json({
-                error: err
-            })
+        if (!user) {
+            return res.status(404).send({ message: "No user found for making admin" });
         }
+
+        res.status(200).json({
+            message: "Make admin successfull"
+        })
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err
+        })
     }
+
+    // if (req.role !== 'admin') {
+    //     const error = new Error("Permission denied!");
+    //     error.statusCode = 401;
+    //     return next(error);
+    // }
+
+    // else {
+    //     try {
+    //         const user = await sequelizeUser.update({
+    //             role: 'editor',
+    //         }, {
+    //             where: {
+    //                 id
+    //             }
+    //         })
+
+    //         if (!user) {
+    //             return res.status(404).send({ message: "No user found for making admin" });
+    //         }
+
+    //         res.status(200).json({
+    //             message: "Make admin successfull"
+    //         })
+
+    //     } catch (err) {
+    //         console.log(err)
+    //         res.status(500).json({
+    //             error: err
+    //         })
+    //     }
+    // }
 }
 
 exports.users_delete = async (req, res, next) => {
@@ -119,36 +144,58 @@ exports.users_delete = async (req, res, next) => {
 
     const { id } = req.body;
     console.log(req.role)
-    if (req.role !== 'admin') {
-        const error = new Error("Permission denied!");
-        error.statusCode = 401;
-        return next(error);
-    }
-
-    else {
-        try {
-            const user = await sequelizeUser.destroy({
-                where: {
-                    id
-                }
-            })
-
-            if (!user) {
-                return res.status(404).send({ message: "User is not found for deleting" });
+    try {
+        const user = await sequelizeUser.destroy({
+            where: {
+                id
             }
+        })
 
-            res.status(200).json({
-                message: "User removed successfully"
-            })
-
-
-        } catch (err) {
-            console.log(err)
-            res.status(500).json({
-                error: err
-            })
+        if (!user) {
+            return res.status(404).send({ message: "User is not found for deleting" });
         }
+
+        res.status(200).json({
+            message: "User removed successfully"
+        })
+
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err
+        })
     }
 
+    // if (req.role !== 'admin') {
+    //     const error = new Error("Permission denied!");
+    //     error.statusCode = 401;
+    //     return next(error);
+    // }
+
+    // else {
+    //     try {
+    //         const user = await sequelizeUser.destroy({
+    //             where: {
+    //                 id
+    //             }
+    //         })
+
+    //         if (!user) {
+    //             return res.status(404).send({ message: "User is not found for deleting" });
+    //         }
+
+    //         res.status(200).json({
+    //             message: "User removed successfully"
+    //         })
+
+
+    //     } catch (err) {
+    //         console.log(err)
+    //         res.status(500).json({
+    //             error: err
+    //         })
+    //     }
+    // }
 
 }

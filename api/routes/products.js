@@ -1,6 +1,5 @@
 const fs = require('fs')
 const express = require('express')
-const req = require('express/lib/request')
 const router = express.Router()
 
 const ProductsController = require('../controllers/products')
@@ -14,20 +13,23 @@ cloudinary.config({
 });
 
 const checkAuth = require('../middleware/check-auth')
+const { authAdmin } = require("./../middleware/roleValid")
+
+
 
 router.use(checkAuth);
 
 router.get("/", ProductsController.products_get_all);
 
-router.post("/", ProductsController.products_create);
+router.post("/", authAdmin("admin", "editor"), ProductsController.products_create);
 
 // router.post("/pic", checkAuth, ProductsController.products_create_with_photo);
 
 router.get("/id", ProductsController.products_get_product_id);
 
-router.patch("/", ProductsController.products_update);
+router.patch("/", authAdmin("admin", "editor"), ProductsController.products_update);
 
-router.delete("/", ProductsController.products_delete);
+router.delete("/", authAdmin("admin", "editor"), ProductsController.products_delete);
 
 
 module.exports = router;

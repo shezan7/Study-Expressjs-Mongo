@@ -27,33 +27,52 @@ exports.products_create = async (req, res, next) => {
     console.log("products_create", req.body);
 
     console.log(req.role)
-    if (req.role == null) {
-        const error = new Error("You have no access to create product");
-        error.statusCode = 401;
-        return next(error);
+    try {
+        const { name, price } = req.body;
+
+        const newProduct = await sequelizeProduct.create({
+            name,
+            price
+        })
+
+        res.json({
+            data: "New Product created successfully",
+            newProduct
+        })
     }
-    else {
-        try {
-            const { name, price } = req.body;
-
-            const newProduct = await sequelizeProduct.create({
-                name,
-                price
-            })
-
-            res.json({
-                data: "New Product created successfully",
-                newProduct
-            })
-        }
-        catch (err) {
-            console.log(err)
-            res.status(500).json({
-                error: err
-            })
-        }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err
+        })
     }
 
+    // if (req.role == null) {
+    //     const error = new Error("You have no access to create product");
+    //     error.statusCode = 401;
+    //     return next(error);
+    // }
+    // else {
+    //     try {
+    //         const { name, price } = req.body;
+
+    //         const newProduct = await sequelizeProduct.create({
+    //             name,
+    //             price
+    //         })
+
+    //         res.json({
+    //             data: "New Product created successfully",
+    //             newProduct
+    //         })
+    //     }
+    //     catch (err) {
+    //         console.log(err)
+    //         res.status(500).json({
+    //             error: err
+    //         })
+    //     }
+    // }
 
 }
 
@@ -121,35 +140,59 @@ exports.products_update = async (req, res, next) => {
     console.log("products_updated", req.body);
 
     console.log(req.role)
-    if (req.role == null) {
-        const error = new Error("You have no access to update product");
-        error.statusCode = 401;
-        return next(error);
-    }
-    else {
-        try {
-            const { id, name, price } = req.body;
+    try {
+        const { id, name, price } = req.body;
 
-            await sequelizeProduct.update({
-                name,
-                price
-            }, {
-                where: {
-                    id
-                }
-            })
+        await sequelizeProduct.update({
+            name,
+            price
+        }, {
+            where: {
+                id
+            }
+        })
 
-            res.json({
-                message: "Product updated successfully"
-            })
-        }
-        catch (err) {
-            console.log(err)
-            res.status(500).json({
-                error: err
-            })
-        }
+        res.json({
+            message: "Product updated successfully"
+        })
     }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err
+        })
+    }
+
+    // if (req.role == null) {
+    //     const error = new Error("You have no access to update product");
+    //     error.statusCode = 401;
+    //     return next(error);
+    // }
+    // else {
+
+    //     try {
+    //         const { id, name, price } = req.body;
+
+    //         await sequelizeProduct.update({
+    //             name,
+    //             price
+    //         }, {
+    //             where: {
+    //                 id
+    //             }
+    //         })
+
+    //         res.json({
+    //             message: "Product updated successfully"
+    //         })
+    //     }
+    //     catch (err) {
+    //         console.log(err)
+    //         res.status(500).json({
+    //             error: err
+    //         })
+    //     }
+    // }
 
 }
 
@@ -157,32 +200,53 @@ exports.products_delete = async (req, res, next) => {
     console.log("products_deleted", req.body);
 
     console.log(req.role)
-    if (req.role == null) {
-        const error = new Error("You have no access to delete product");
-        error.statusCode = 401;
-        return next(error);
-    }
-    else {
-        try {
-            const { id } = req.body;
-            const product = await sequelizeProduct.destroy({
-                where: {
-                    id
-                }
-            })
-            if (!product) {
-                return res.status(404).send({ message: "Product is not found for deleting" });
+    try {
+        const { id } = req.body;
+        const product = await sequelizeProduct.destroy({
+            where: {
+                id
             }
-            res.json({
-                message: "Product deleted successfully"
-            })
+        })
+        if (!product) {
+            return res.status(404).send({ message: "Product is not found for deleting" });
         }
-        catch (err) {
-            console.log(err)
-            res.status(500).json({
-                error: err
-            })
-        }
+        res.json({
+            message: "Product deleted successfully"
+        })
     }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err
+        })
+    }
+
+    // if (req.role == null) {
+    //     const error = new Error("You have no access to delete product");
+    //     error.statusCode = 401;
+    //     return next(error);
+    // }
+    // else {
+    //     try {
+    //         const { id } = req.body;
+    //         const product = await sequelizeProduct.destroy({
+    //             where: {
+    //                 id
+    //             }
+    //         })
+    //         if (!product) {
+    //             return res.status(404).send({ message: "Product is not found for deleting" });
+    //         }
+    //         res.json({
+    //             message: "Product deleted successfully"
+    //         })
+    //     }
+    //     catch (err) {
+    //         console.log(err)
+    //         res.status(500).json({
+    //             error: err
+    //         })
+    //     }
+    // }
 
 }
