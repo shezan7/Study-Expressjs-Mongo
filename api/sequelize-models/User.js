@@ -1,4 +1,4 @@
-const { DataTypes, BOOLEAN } = require('sequelize')
+const { DataTypes } = require('sequelize')
 
 const sequelize = require('../config/db');
 

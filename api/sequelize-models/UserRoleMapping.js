@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize')
 
 const sequelize = require('../config/db');
 
-const { INTEGER, STRING } = DataTypes
+const { INTEGER } = DataTypes
 
 const userRoleMapping = sequelize.define('userRoleMapping', {
     userId: {

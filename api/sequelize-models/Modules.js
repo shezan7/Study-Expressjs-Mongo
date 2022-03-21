@@ -2,15 +2,11 @@ const { DataTypes } = require('sequelize')
 
 const sequelize = require('../config/db');
 
-const { INTEGER, STRING } = DataTypes
+const { STRING } = DataTypes
 
-const access = sequelize.define('access', {
+const module = sequelize.define('module', {
     name: {
         type: STRING,
-        allowNull: false
-    },
-    module_id: {
-        type: INTEGER,
         allowNull: false
     }
 }, {
@@ -18,4 +14,4 @@ const access = sequelize.define('access', {
     timestamps: true
 })
 
-module.exports = access 
+module.exports = module 
