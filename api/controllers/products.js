@@ -12,9 +12,6 @@ exports.products_get_all = async (req, res, next) => {
             message: productAll
         })
     }
-    // catch (error) {
-    //     next(error);
-    // }
     catch (err) {
         console.log(err)
         res.status(500).json({
@@ -26,7 +23,6 @@ exports.products_get_all = async (req, res, next) => {
 exports.products_create = async (req, res, next) => {
     console.log("products_create", req.body);
 
-    console.log(req.role)
     try {
         const { name, price } = req.body;
 
@@ -76,6 +72,33 @@ exports.products_create = async (req, res, next) => {
 
 }
 
+exports.products_get_product_id = async (req, res, next) => {
+    console.log("product_id", req.body);
+
+    try {
+        const { id } = req.body;
+        const productId = await sequelizeProduct.findAll({
+            attributes: ['id', 'name', 'price'],
+            where: {
+                id
+            }
+        })
+
+        res.json({
+            message: "ProductId find successfully", productId
+        })
+    }
+    // catch (error) {
+    //     next(error);
+    // }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err
+        })
+    }
+}
+
 exports.products_create_with_photo = async (req, res, next) => {
 
     const filePath = req.files.photo.tempFilePath
@@ -107,33 +130,6 @@ exports.products_create_with_photo = async (req, res, next) => {
                 error: err
             })
         })
-}
-
-exports.products_get_product_id = async (req, res, next) => {
-    console.log("product_id", req.body);
-
-    try {
-        const { id } = req.body;
-        const productId = await sequelizeProduct.findAll({
-            attributes: ['id', 'name', 'price'],
-            where: {
-                id
-            }
-        })
-
-        res.json({
-            message: "ProductId find successfully", productId
-        })
-    }
-    // catch (error) {
-    //     next(error);
-    // }
-    catch (err) {
-        console.log(err)
-        res.status(500).json({
-            error: err
-        })
-    }
 }
 
 exports.products_update = async (req, res, next) => {

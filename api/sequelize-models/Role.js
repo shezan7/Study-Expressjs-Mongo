@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize')
 
 const sequelize = require('../config/db');
 
-const { STRING } = DataTypes
+const { STRING, INTEGER } = DataTypes
 
 const role = sequelize.define('role', {
     name: {
@@ -14,7 +14,7 @@ const role = sequelize.define('role', {
     //     allowNull: false
     // },
     accesslist: {
-        type: STRING,
+        type: [INTEGER],
         allowNull: false
     }
 }, {

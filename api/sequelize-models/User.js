@@ -16,9 +16,6 @@ const user = sequelize.define('user', {
     // role: {
     //     type: STRING,
     //     // allowNull: false
-    // },
-    // isAdmin: {
-    //     type: BOOLEAN
     // }
 }, {
     schema: "shezan",
