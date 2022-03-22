@@ -13,7 +13,7 @@ cloudinary.config({
 });
 
 const checkAuth = require('../middleware/check-auth')
-const { checkAccess } = require("./../middleware/roleValid")
+const { checkUser } = require("./../middleware/roleValid")
 
 
 
@@ -21,16 +21,16 @@ router.use(checkAuth);
 
 router.get("/", ProductsController.products_get_all);
 
-router.post("/", checkAccess(1), ProductsController.products_create);
+router.post("/", checkUser(2), ProductsController.products_create);
 // router.post("/", authAdmin(1), ProductsController.products_create);
 
 // router.post("/pic", checkAuth, ProductsController.products_create_with_photo);
 
 router.get("/id", ProductsController.products_get_product_id);
 
-router.patch("/", checkAccess("admin", "editor"), ProductsController.products_update);
+router.patch("/", checkUser("admin", "editor"), ProductsController.products_update);
 
-router.delete("/", checkAccess("admin", "editor"), ProductsController.products_delete);
+router.delete("/", checkUser("admin", "editor"), ProductsController.products_delete);
 
 
 module.exports = router;

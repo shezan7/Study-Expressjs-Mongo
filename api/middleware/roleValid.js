@@ -2,38 +2,47 @@ const jwt = require("jsonwebtoken")
 const { QueryTypes } = require('sequelize')
 const db = require('../config/db')
 
-exports.checkAccess = (access) => {
+exports.checkUser = (access) => {
     return roleValid = async (req, res, next) => {
-
-        const AccesslistInfo = await db.query(`
-            SELECT 
-                r.accesslist 
+        const AccesslistInfo = await db.query(
+            `SELECT 
+                u.*,
+                (SELECT 
+                    r.accesslist 
+                FROM 
+                    shezan.user_role_mapping urm, 
+                    shezan.roles r 
+                WHERE 
+                    u.id = urm.user_id  
+                    AND urm.role_id = r.id)
             FROM 
-                shezan.users u, 
-                shezan.user_role_mapping urm, 
-                shezan.roles r
+                shezan.users u
             WHERE 
-                u.id = urm.user_id and 
-                u.id= ${req.user.id} AND
-                urm.role_id = r.id
-        `, {
-            type: QueryTypes.SELECT
-        })
+                u.id= ${req.user.id};`
+            , {
+                type: QueryTypes.SELECT
+            })
         if (AccesslistInfo[0].accesslist) {
-            if (AccesslistInfo[0].accesslist.findIndex(el => el === access) === -1) {
+            //console.log(AccesslistInfo[0].accesslist, access)
+            if (AccesslistInfo[0].accesslist.findIndex(element => element === access) === -1) {
                 res.status(401).json({
                     status: "Failed",
                     message: "Unauthorized! You have no access"
                 })
-            } else {
+            }
+            else {
                 return next();
             }
-        } else {
+        }
+        else {
             res.status(401).json({
                 status: "Failed",
                 message: "No accesslist found"
             })
         }
+
+
+
         // console.log(AccesslistInfo)
         // if (roles.includes(req.user.role)) {
         //     // if (roles.includes(req.user.role.id)) {

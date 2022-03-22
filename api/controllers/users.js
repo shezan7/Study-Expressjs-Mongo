@@ -3,6 +3,10 @@ const sequelizeUser = require('../sequelize-models/User')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+const db = require('../config/db')
+const { QueryTypes } = require('sequelize')
+
+
 exports.users_signup = async (req, res, next) => {
     console.log("users_register", req.body);
     const { email, password } = req.body;
@@ -37,6 +41,8 @@ exports.users_login = async (req, res, next) => {
 
     const { email, password } = req.body;
 
+
+    console.log(email)
     try {
         const user = await sequelizeUser.findOne({
             where: {
@@ -44,7 +50,44 @@ exports.users_login = async (req, res, next) => {
             }
         })
 
-        // console.log(user);
+        // const AccesslistInfo = await db.query(
+        //     `SELECT 
+        //         u.*,
+        //         (SELECT 
+        //             r.accesslist 
+        //         FROM 
+        //             shezan.user_role_mapping urm, 
+        //             shezan.roles r 
+        //         WHERE 
+        //             u.id = urm.user_id  
+        //             AND urm.role_id = r.id)
+        //     FROM 
+        //         shezan.users u
+        //     WHERE 
+        //         u.email= '${req.body.email}';`
+        //     , {
+        //         type: QueryTypes.SELECT
+        //     })
+        // if (AccesslistInfo[0].accesslist) {
+        //     //console.log(AccesslistInfo[0].accesslist, access)
+        //     if (AccesslistInfo[0].accesslist.findIndex(element => element === access) === -1) {
+        //         res.status(401).json({
+        //             status: "Failed",
+        //             message: "Unauthorized! You have no access"
+        //         })
+        //     }
+        //     else {
+        //         return next();
+        //     }
+        // }
+        // else {
+        //     res.status(401).json({
+        //         status: "Failed",
+        //         message: "No accesslist found"
+        //     })
+        // }
+
+        //console.log(user);
         if (!user) {
             return res.status(404).send({ message: "User Not found." });
         }
@@ -55,9 +98,10 @@ exports.users_login = async (req, res, next) => {
             });
         }
 
+
+
         const jwtToken = jwt.sign({
-            id: user.id,
-            role: user.role,
+            id: user.id
         },
             process.env.JWT_KEY,
             {
@@ -68,6 +112,8 @@ exports.users_login = async (req, res, next) => {
             data: "User login successfull",
             token: jwtToken
         })
+
+
     }
     catch (err) {
         console.log(err)
