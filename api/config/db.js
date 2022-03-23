@@ -9,7 +9,7 @@ const sequelize = new Sequelize(process.env.Database, process.env.User, process.
     }
   },
   host: process.env.Host,
-  logging: true
+  logging: false
 });
 
 module.exports = sequelize;
