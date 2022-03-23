@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken')
 const db = require('../config/db')
 const { QueryTypes } = require('sequelize')
 
+const urm = require('../sequelize-models/UserRoleMapping')
+
 
 exports.users_signup = async (req, res, next) => {
     console.log("users_register", req.body);
@@ -15,6 +17,27 @@ exports.users_signup = async (req, res, next) => {
             email: email,
             password: bcrypt.hashSync(password, 12)
         })
+        // console.log("new", newUser)
+        if (newUser) {
+            // const setUserRole = await urm.create({
+            //     user_id: newUser.id,
+            //     role_id: 3
+            // })
+
+            // console.log("Set User", setUserRole);
+            try {
+                const setUserRole = await urm.create({
+                    user_id: newUser.id,
+                    role_id: 3
+                })
+            } catch (error) {
+                console.log(err)
+                res.status(500).json({
+                    error: err
+                })
+            }
+
+        }
 
         if (!newUser) {
             const error = new Error('User not created!');

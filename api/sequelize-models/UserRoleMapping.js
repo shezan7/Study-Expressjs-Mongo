@@ -4,18 +4,19 @@ const sequelize = require('../config/db');
 
 const { INTEGER } = DataTypes
 
-const userRoleMapping = sequelize.define('userRoleMapping', {
-    userId: {
+const userRoleMapping = sequelize.define('user_role_mapping', {
+    user_id: {
         type: INTEGER,
         allowNull: false
     },
-    roleId: {
+    role_id: {
         type: INTEGER,
         allowNull: false
     }
 }, {
     schema: "shezan",
-    timestamps: true
+    timestamps: false,
+    freezeTableName: true
 })
 
 module.exports = userRoleMapping 
