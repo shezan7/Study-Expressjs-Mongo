@@ -41,71 +41,44 @@ exports.users_login = async (req, res, next) => {
 
     const { email, password } = req.body;
 
-
-    console.log(email)
     try {
-        const user = await sequelizeUser.findOne({
-            where: {
-                email: email
-            }
-        })
 
-        // const AccesslistInfo = await db.query(
-        //     `SELECT 
-        //         u.*,
-        //         (SELECT 
-        //             r.accesslist 
-        //         FROM 
-        //             shezan.user_role_mapping urm, 
-        //             shezan.roles r 
-        //         WHERE 
-        //             u.id = urm.user_id  
-        //             AND urm.role_id = r.id)
-        //     FROM 
-        //         shezan.users u
-        //     WHERE 
-        //         u.email= '${req.body.email}';`
-        //     , {
-        //         type: QueryTypes.SELECT
-        //     })
-        // if (AccesslistInfo[0].accesslist) {
-        //     //console.log(AccesslistInfo[0].accesslist, access)
-        //     if (AccesslistInfo[0].accesslist.findIndex(element => element === access) === -1) {
-        //         res.status(401).json({
-        //             status: "Failed",
-        //             message: "Unauthorized! You have no access"
-        //         })
-        //     }
-        //     else {
-        //         return next();
-        //     }
-        // }
-        // else {
-        //     res.status(401).json({
-        //         status: "Failed",
-        //         message: "No accesslist found"
-        //     })
-        // }
+        const user = await db.query(
+            `SELECT 
+                u.*,
+                (SELECT 
+                    r.accesslist 
+                FROM 
+                    shezan.user_role_mapping urm, 
+                    shezan.roles r 
+                WHERE 
+                    u.id = urm.user_id  
+                    AND urm.role_id = r.id)
+            FROM 
+                shezan.users u
+            WHERE 
+                u.email= '${email}';`
+            , {
+                type: QueryTypes.SELECT
+            })
 
-        //console.log(user);
-        if (!user) {
+
+        if (!user[0]) {
             return res.status(404).send({ message: "User Not found." });
         }
 
-        if (user.password == bcrypt.hashSync(password, 12)) {
+        if (user[0].password == bcrypt.hashSync(password, 12)) {
             return res.status(401).send({
                 message: "Invalid Password!"
             });
         }
 
-
-
         const jwtToken = jwt.sign({
-            id: user.id
-        },
-            process.env.JWT_KEY,
+            id: user[0].id,
+            access: user[0].accesslist
+        }, process.env.JWT_KEY,
             {
-                expiresIn: "1h"
+                expiresIn: "8h"
             })
 
         res.status(200).json({
