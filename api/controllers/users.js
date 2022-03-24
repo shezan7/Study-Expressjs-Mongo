@@ -122,18 +122,18 @@ exports.users_login = async (req, res, next) => {
 exports.make_admin = async (req, res, next) => {
     console.log("users_info", req.body);
 
-    const { id } = req.body;
-    console.log(req.role)
+    const { user_id } = req.body
     try {
-        const user = await sequelizeUser.update({
-            role: 'editor',
+
+        const editorRole = await urm.update({
+            role_id: 2
         }, {
             where: {
-                id
+                user_id
             }
         })
 
-        if (!user) {
+        if (!editorRole[0]) {
             return res.status(404).send({ message: "No user found for making admin" });
         }
 
@@ -147,6 +147,21 @@ exports.make_admin = async (req, res, next) => {
             error: err
         })
     }
+
+
+    // const user = await sequelizeUser.update({
+    //     role: 'editor',
+    // }, {
+    //     where: {
+    //         id
+    //     }
+    // })
+    // const editorRole = await role.create({
+    //     name: "editor",
+    //     accesslist: [2, 3, 5, 6, 9, 10, 11, 12]
+    // })
+
+
 
     // if (req.role !== 'admin') {
     //     const error = new Error("Permission denied!");
@@ -185,7 +200,7 @@ exports.users_delete = async (req, res, next) => {
     console.log("users_remove", req.body);
 
     const { id } = req.body;
-    console.log(req.role)
+
     try {
         const user = await sequelizeUser.destroy({
             where: {

@@ -14,9 +14,30 @@ exports.orders_get_all = async (req, res, next) => {
             message: orderAll
         })
     }
-    // catch (error) {
-    //     next(error);
-    // }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err
+        })
+    }
+};
+
+exports.orders_get_order = async (req, res, next) => {
+    console.log("order_id", req.params);
+
+    try {
+        const { id } = req.params;
+        const orderId = await sequelizeOrder.findAll({
+            attributes: ['id', 'product', 'quantity'],
+            where: {
+                id
+            }
+        })
+
+        res.json({
+            message: "orderId find successfully", orderId
+        })
+    }
     catch (err) {
         console.log(err)
         res.status(500).json({
@@ -41,9 +62,6 @@ exports.orders_create_order = async (req, res, next) => {
             //newOrder
         })
     }
-    // catch (error) {
-    //     next(error);
-    // }
     catch (err) {
         console.log(err)
         res.status(500).json({
@@ -51,33 +69,6 @@ exports.orders_create_order = async (req, res, next) => {
         })
     }
 
-};
-
-exports.orders_get_order = async (req, res, next) => {
-    console.log("order_id", req.body);
-
-    try {
-        const { id } = req.body;
-        const orderId = await sequelizeOrder.findAll({
-            attributes: ['id', 'product', 'quantity'],
-            where: {
-                id
-            }
-        })
-
-        res.json({
-            message: "orderId find successfully", orderId
-        })
-    }
-    // catch (error) {
-    //     next(error);
-    // }
-    catch (err) {
-        console.log(err)
-        res.status(500).json({
-            error: err
-        })
-    }
 };
 
 exports.orders_delete_order = async (req, res, next) => {

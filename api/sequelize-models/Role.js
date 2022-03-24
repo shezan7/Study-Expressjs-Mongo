@@ -4,7 +4,7 @@ const sequelize = require('../config/db');
 
 const { STRING, INTEGER } = DataTypes
 
-const role = sequelize.define('role', {
+const role = sequelize.define('roles', {
     name: {
         type: STRING,
         allowNull: false
@@ -19,7 +19,8 @@ const role = sequelize.define('role', {
     }
 }, {
     schema: "shezan",
-    timestamps: true
+    timestamps: false,
+    freezeTableName: true
 })
 
 module.exports = role

@@ -20,6 +20,30 @@ exports.products_get_all = async (req, res, next) => {
     }
 }
 
+exports.products_get_product_id = async (req, res, next) => {
+    console.log("product_id", req.params);
+
+    try {
+        const { id } = req.params;
+        const productId = await sequelizeProduct.findOne({
+            attributes: ['id', 'name', 'price'],
+            where: {
+                id
+            }
+        })
+
+        res.json({
+            message: "ProductId find successfully", productId
+        })
+    }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: err
+        })
+    }
+}
+
 exports.products_create = async (req, res, next) => {
     console.log("products_create", req.body);
 
@@ -72,33 +96,6 @@ exports.products_create = async (req, res, next) => {
 
 }
 
-exports.products_get_product_id = async (req, res, next) => {
-    console.log("product_id", req.body);
-
-    try {
-        const { id } = req.body;
-        const productId = await sequelizeProduct.findAll({
-            attributes: ['id', 'name', 'price'],
-            where: {
-                id
-            }
-        })
-
-        res.json({
-            message: "ProductId find successfully", productId
-        })
-    }
-    // catch (error) {
-    //     next(error);
-    // }
-    catch (err) {
-        console.log(err)
-        res.status(500).json({
-            error: err
-        })
-    }
-}
-
 exports.products_create_with_photo = async (req, res, next) => {
 
     const filePath = req.files.photo.tempFilePath
@@ -135,7 +132,6 @@ exports.products_create_with_photo = async (req, res, next) => {
 exports.products_update = async (req, res, next) => {
     console.log("products_updated", req.body);
 
-    console.log(req.role)
     try {
         const { id, name, price } = req.body;
 
@@ -195,7 +191,6 @@ exports.products_update = async (req, res, next) => {
 exports.products_delete = async (req, res, next) => {
     console.log("products_deleted", req.body);
 
-    console.log(req.role)
     try {
         const { id } = req.body;
         const product = await sequelizeProduct.destroy({

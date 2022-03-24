@@ -4,14 +4,18 @@ const checkAuth = require('../middleware/check-auth');
 
 const OrdersController = require('../controllers/orders');
 
-// Handle incoming GET requests to /orders
-router.get("/", OrdersController.orders_get_all);
+const { checkUser } = require("./../middleware/roleValid")
 
-router.post("/", checkAuth, OrdersController.orders_create_order);
 
-router.get("/id", OrdersController.orders_get_order);
+router.use(checkAuth);
 
-router.delete("/", checkAuth, OrdersController.orders_delete_order);
+router.get("/", checkUser(9), OrdersController.orders_get_all);
+
+router.get("/:id", checkUser(9), OrdersController.orders_get_order);
+
+router.post("/", checkUser(10), OrdersController.orders_create_order);
+
+router.delete("/", checkUser(12), OrdersController.orders_delete_order);
 
 
 module.exports = router;

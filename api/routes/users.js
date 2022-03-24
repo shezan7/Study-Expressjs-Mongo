@@ -11,9 +11,9 @@ router.post("/signup", UsersController.users_signup);
 
 router.post("/login", UsersController.users_login);
 
-router.patch("/make-admin", checkUser("admin"), checkAuth, UsersController.make_admin);
+router.patch("/make-admin", checkAuth, checkUser(13), UsersController.make_admin);
 
-router.delete("/", checkUser("admin"), checkAuth, UsersController.users_delete);
+router.delete("/", checkAuth, checkUser(14), UsersController.users_delete);
 
 
 module.exports = router;

@@ -19,18 +19,18 @@ const { checkUser } = require("./../middleware/roleValid")
 
 router.use(checkAuth);
 
-router.get("/", ProductsController.products_get_all);
+router.get("/", checkUser(1), ProductsController.products_get_all);
+
+router.get("/:id", checkUser(1), ProductsController.products_get_product_id);
 
 router.post("/", checkUser(2), ProductsController.products_create);
 // router.post("/", authAdmin(1), ProductsController.products_create);
 
 // router.post("/pic", checkAuth, ProductsController.products_create_with_photo);
 
-router.get("/id", ProductsController.products_get_product_id);
+router.patch("/", checkUser(3), ProductsController.products_update);
 
-router.patch("/", checkUser("admin", "editor"), ProductsController.products_update);
-
-router.delete("/", checkUser("admin", "editor"), ProductsController.products_delete);
+router.delete("/", checkUser(4), ProductsController.products_delete);
 
 
 module.exports = router;
