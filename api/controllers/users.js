@@ -1,11 +1,10 @@
-const sequelizeUser = require('../sequelize-models/User')
-
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 const db = require('../config/db')
 const { QueryTypes } = require('sequelize')
 
+const sequelizeUser = require('../sequelize-models/User')
 const urm = require('../sequelize-models/UserRoleMapping')
 
 
@@ -125,21 +124,31 @@ exports.make_admin = async (req, res, next) => {
     const { user_id } = req.body
     try {
 
-        const editorRole = await urm.update({
-            role_id: 2
-        }, {
+        const user = await urm.findOne({
             where: {
                 user_id
             }
         })
-
-        if (!editorRole[0]) {
+        //console.log("first", user.role_id)
+        if (!user) {
             return res.status(404).send({ message: "No user found for making admin" });
         }
+        else if (user.role_id === 2) {
+            return res.status(404).send({ message: "Already admin" });
+        }
+        else {
+            const editorRole = await urm.update({
+                role_id: 2
+            }, {
+                where: {
+                    user_id
+                }
+            })
 
-        res.status(200).json({
-            message: "Make admin successfull"
-        })
+            res.status(200).json({
+                message: "Make admin successfull"
+            })
+        }
 
     } catch (err) {
         console.log(err)
