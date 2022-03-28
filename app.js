@@ -44,12 +44,13 @@ app.use(passport.session())
 
 app.get('/', (req, res) => res.send('You are not logged in'))
 app.get('/failed', (req, res) => res.send('Failed to log in!!!'))
-app.get('/good', (req, res) => res.send('Welcome ${req.user.email}'))
+app.get('/good', (req, res) => res.send(`Welcome ${req.user.name.givenName}`))
 
 app.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get('/google/callback', passport.authenticate('google', { failureRedirect: '/failed' }),
     function (req, res) {
+        console.log(req.user)
         // Successful authentication, redirect home.
         res.redirect('/good');
     });
