@@ -18,12 +18,6 @@ exports.users_signup = async (req, res, next) => {
         })
         // console.log("new", newUser)
         if (newUser) {
-            // const setUserRole = await urm.create({
-            //     user_id: newUser.id,
-            //     role_id: 3
-            // })
-
-            // console.log("Set User", setUserRole);
             try {
                 const setUserRole = await urm.create({
                     user_id: newUser.id,
@@ -104,9 +98,10 @@ exports.users_login = async (req, res, next) => {
 
         res.status(200).json({
             data: "User login successfull",
-            token: jwtToken
+            token: jwtToken,
+            userId: user[0].id
         })
-
+        console.log(user[0].id)
 
     }
     catch (err) {

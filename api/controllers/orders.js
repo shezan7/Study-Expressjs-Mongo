@@ -1,4 +1,5 @@
 const sequelizeOrder = require('../sequelize-models/Order')
+const sequelizeUserOrderMapping = require('../sequelize-models/UserOrderMapping')
 
 exports.orders_get_all = async (req, res, next) => {
     console.log("orders", req.body);
@@ -49,12 +50,26 @@ exports.orders_get_order = async (req, res, next) => {
 exports.orders_create_order = async (req, res, next) => {
 
     console.log("orders_create", req.body);
+    console.log("two", req.user);
+    console.log("three", req.user.id);
+
+    const user_id = req.user.id
 
     try {
-        const { product, quantity } = req.body;
+        const { product_id, quantity } = req.body;
+
         const newOrder = await sequelizeOrder.create({
-            product,
+            product_id,
             quantity
+        })
+        console.log(newOrder)
+        const newOrderId = newOrder.id
+        console.log("newOrderID", newOrder.id)
+
+
+        const orderItem = await sequelizeUserOrderMapping.create({
+            user_id,
+            order_id: newOrderId
         })
 
         res.json({
