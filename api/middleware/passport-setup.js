@@ -8,9 +8,10 @@ passport.serializeUser((user, done) => {
     done(null, user)
 })
 passport.deserializeUser((user, done) => {
-    //User.findById(id).then((user) => {
-    done(null, user)
-    //}).catch((error) => done(error))
+    User.findByPk(id).then((user) => {
+        done(null, user)
+    })
+        .catch((error) => done(error))
 })
 
 const getProfile = (profile) => {
@@ -18,7 +19,7 @@ const getProfile = (profile) => {
     if (emails && emails.length) {
         const email = emails[0].value
         return {
-            googleId: id,
+            google_id: id,
             name: displayName,
             email,
             provider
@@ -36,11 +37,14 @@ passport.use(
         },
         //  Passport verify callback
         async (accessToken, refreshToken, profile, done) => {
-            console.log(profile);
+            console.log("one", profile);
             try {
+                console.log("two", profile.displayName);
+
                 const existingGoogleUser = await User.findOne({
                     where: { google_id: profile.id }
                 });
+                console.log("three", existingGoogleUser);
                 if (!existingGoogleUser) {
                     const existingEmailUser = await User.findOne({
                         where: { email: getProfile(profile).email }

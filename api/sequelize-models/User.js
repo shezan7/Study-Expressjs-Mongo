@@ -11,7 +11,7 @@ const user = sequelize.define('user', {
     },
     password: {
         type: STRING,
-        allowNull: false
+        allowNull: true
     },
     google_id: {
         type: STRING,

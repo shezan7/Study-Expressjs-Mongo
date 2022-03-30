@@ -12,9 +12,9 @@ router.get('/good', (req, res) => res.send('Welcome Page'))
 
 
 
-router.get('/google', passport.authenticate('google', { scope: ['profile'] }));
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/failed' }),
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/googleAuth/failed' }),
     function (req, res) {
         console.log(req.user.id)
         // Successful authentication, redirect home.
