@@ -112,10 +112,6 @@ exports.users_login = async (req, res, next) => {
     }
 }
 
-// exports.users_google_log_in = async (req, res, next) => {
-//     req.users_google_log_in
-// }
-
 exports.make_admin = async (req, res, next) => {
     console.log("users_info", req.body);
 
@@ -154,53 +150,6 @@ exports.make_admin = async (req, res, next) => {
             error: err
         })
     }
-
-
-    // const user = await sequelizeUser.update({
-    //     role: 'editor',
-    // }, {
-    //     where: {
-    //         id
-    //     }
-    // })
-    // const editorRole = await role.create({
-    //     name: "editor",
-    //     accesslist: [2, 3, 5, 6, 9, 10, 11, 12]
-    // })
-
-
-
-    // if (req.role !== 'admin') {
-    //     const error = new Error("Permission denied!");
-    //     error.statusCode = 401;
-    //     return next(error);
-    // }
-
-    // else {
-    //     try {
-    //         const user = await sequelizeUser.update({
-    //             role: 'editor',
-    //         }, {
-    //             where: {
-    //                 id
-    //             }
-    //         })
-
-    //         if (!user) {
-    //             return res.status(404).send({ message: "No user found for making admin" });
-    //         }
-
-    //         res.status(200).json({
-    //             message: "Make admin successfull"
-    //         })
-
-    //     } catch (err) {
-    //         console.log(err)
-    //         res.status(500).json({
-    //             error: err
-    //         })
-    //     }
-    // }
 }
 
 exports.users_delete = async (req, res, next) => {
@@ -230,36 +179,4 @@ exports.users_delete = async (req, res, next) => {
             error: err
         })
     }
-
-    // if (req.role !== 'admin') {
-    //     const error = new Error("Permission denied!");
-    //     error.statusCode = 401;
-    //     return next(error);
-    // }
-
-    // else {
-    //     try {
-    //         const user = await sequelizeUser.destroy({
-    //             where: {
-    //                 id
-    //             }
-    //         })
-
-    //         if (!user) {
-    //             return res.status(404).send({ message: "User is not found for deleting" });
-    //         }
-
-    //         res.status(200).json({
-    //             message: "User removed successfully"
-    //         })
-
-
-    //     } catch (err) {
-    //         console.log(err)
-    //         res.status(500).json({
-    //             error: err
-    //         })
-    //     }
-    // }
-
 }

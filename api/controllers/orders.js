@@ -162,32 +162,30 @@ exports.orders_create_order = async (req, res, next) => {
     const user_id = req.user.id
 
     try {
-        try {
-            const { product_id, quantity } = req.body;
+        const { product_id, quantity } = req.body;
 
-            const newOrder = await sequelizeOrder.create({
-                product_id,
-                quantity
-            })
-            // console.log(newOrder)
-            const newOrderId = newOrder.id
-            console.log("newOrderID", newOrder.id)
+        const newOrder = await sequelizeOrder.create({
+            product_id,
+            quantity
+        })
+        // console.log(newOrder)
+        const newOrderId = newOrder.id
+        console.log("newOrderID", newOrder.id)
 
+        const orderItem = await sequelizeUserOrderMapping.create({
+            user_id,
+            order_id: newOrderId
+        })
 
-            const orderItem = await sequelizeUserOrderMapping.create({
-                user_id,
-                order_id: newOrderId
-            })
+        res.json({
+            data: "New Order created successfully"
+            //newOrder
+        })
 
-            res.json({
-                data: "New Order created successfully"
-                //newOrder
-            })
-        } catch (error) {
-            console.log(error)
-            res.status(505).json({
-                error: "Sorry, order creation failed!"
-            })
+        if (!newOrder) {
+            const error = new Error('Order not created!');
+            error.status = 500;
+            throw error;
         }
     }
     catch (err) {
