@@ -1,3 +1,6 @@
+const db = require('../config/db')
+const { QueryTypes } = require('sequelize')
+
 const sequelizeOrder = require('../sequelize-models/Order')
 const sequelizeUserOrderMapping = require('../sequelize-models/UserOrderMapping')
 
@@ -30,14 +33,35 @@ exports.orders_get_all = async (req, res, next) => {
 
 
     try {
+        // if (userOrders) {
+        //     console.log("two")
+        //     const order = await sequelizeOrder.findAll({
+        //         attributes: ['product_id', 'quantity'],
+        //         where: {
+        //             id: userOrders
+        //         }
+        //     })
+
         if (userOrders) {
-            console.log("two")
-            const order = await sequelizeOrder.findAll({
-                attributes: ['product_id', 'quantity'],
-                where: {
-                    id: userOrders
-                }
-            })
+            const order = await db.query(
+                `SELECT
+                o.product_id,
+                o.quantity,
+                p.price,
+                (p.price * o.quantity) AS total_price
+                FROM
+                    shezan.products p,
+                    shezan.orders o
+                WHERE
+                    p.id = o.product_id;`
+                , {
+                    type: QueryTypes.SELECT
+                })
+
+
+
+
+
             // if (!order) {
             //     return res.status(404).send({ message: "Order is not found for deleting" });
             // }
@@ -112,13 +136,36 @@ exports.orders_get_order = async (req, res, next) => {
     try {
         if (userOrders.includes(parseInt(req.params.id))) {
             console.log("two")
+            // const { id } = req.params;
+            // const order = await sequelizeOrder.findOne({
+            //     attributes: ['product_id', 'quantity'],
+            //     where: {
+            //         id
+            //     }
+            // })
+
             const { id } = req.params;
-            const order = await sequelizeOrder.findOne({
-                attributes: ['product_id', 'quantity'],
-                where: {
-                    id
-                }
-            })
+
+            const order = await db.query(
+                `SELECT
+                o.product_id,
+                o.quantity,
+                p.price,
+                (p.price * o.quantity) AS total_price
+                FROM
+                    shezan.products p,
+                    shezan.orders o
+                WHERE
+                    p.id = o.product_id
+                    AND o.id = ${id};`
+                , {
+                    type: QueryTypes.SELECT
+                })
+
+
+
+
+
             // if (!order) {
             //     return res.status(404).send({ message: "Order is not found for deleting" });
             // }
