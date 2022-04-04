@@ -30,11 +30,18 @@ const getProfile = (profile) => {
 
 passport.use(
     new GoogleStrategy(
+        // {
+        //     clientID: "493115458590-r0aqeelnrd08kt2kdd71iou3kfovcei1.apps.googleusercontent.com",
+        //     clientSecret: "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",
+        //     callbackURL: "http://localhost:3000/googleAuth/google/callback"
+        // },
         {
-            clientID: "493115458590-r0aqeelnrd08kt2kdd71iou3kfovcei1.apps.googleusercontent.com",
-            clientSecret: "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",
+            clientID: process.env.Client_Id,
+            clientSecret: process.env.Client_Secret,
             callbackURL: "http://localhost:3000/googleAuth/google/callback"
         },
+
+
         //  Passport verify callback
         async (accessToken, refreshToken, profile, done) => {
             console.log("one", profile);

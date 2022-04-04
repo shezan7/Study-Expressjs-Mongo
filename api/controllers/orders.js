@@ -169,12 +169,11 @@ exports.orders_create_order = async (req, res, next) => {
             quantity
         })
         // console.log(newOrder)
-        const newOrderId = newOrder.id
         console.log("newOrderID", newOrder.id)
 
         const orderItem = await sequelizeUserOrderMapping.create({
             user_id,
-            order_id: newOrderId
+            order_id: newOrder.id
         })
 
         res.json({
