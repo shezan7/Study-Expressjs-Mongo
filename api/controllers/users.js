@@ -11,10 +11,12 @@ const urm = require('../sequelize-models/UserRoleMapping')
 exports.users_signup = async (req, res, next) => {
     console.log("users_register", req.body);
     const { email, password } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    hashPassword = await bcrypt.hash(password, salt);
     try {
         const newUser = await sequelizeUser.create({
             email: email,
-            password: bcrypt.hashSync(password, 12)
+            password: hashPassword
         })
         // console.log("new", newUser)
         if (newUser) {
@@ -77,31 +79,34 @@ exports.users_login = async (req, res, next) => {
                 type: QueryTypes.SELECT
             })
 
-
         if (!user[0]) {
             return res.status(404).send({ message: "User Not found." });
         }
+        if (user[0]) {
+            const validPassword = await bcrypt.compare(password, user[0].password)
 
-        if (user[0].password == bcrypt.hashSync(password, 12)) {
-            return res.status(401).send({
-                message: "Invalid Password!"
-            });
+            if (validPassword) {
+                const jwtToken = jwt.sign({
+                    id: user[0].id,
+                    access: user[0].accesslist
+                }, process.env.JWT_KEY,
+                    {
+                        expiresIn: "8h"
+                    })
+
+                res.status(200).json({
+                    data: "User login successfull",
+                    token: jwtToken,
+                    userId: user[0].id
+                })
+                console.log(user[0].id)
+            }
+            else {
+                return res.status(401).send({
+                    message: "Invalid Password!"
+                });
+            }
         }
-
-        const jwtToken = jwt.sign({
-            id: user[0].id,
-            access: user[0].accesslist
-        }, process.env.JWT_KEY,
-            {
-                expiresIn: "8h"
-            })
-
-        res.status(200).json({
-            data: "User login successfull",
-            token: jwtToken,
-            userId: user[0].id
-        })
-        console.log(user[0].id)
 
     }
     catch (err) {
